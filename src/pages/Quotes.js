@@ -13,10 +13,13 @@ function Quotes() {
       if (!state.quote) {
         throw Error("There is not quote so... no Author associated");
       }
-      console.log(`Quote author`, state.quote.quoteAuthor);
       const response = await fetchQuotesByAuthor(state.quote.quoteAuthor);
-      dispatch({ type: "SET_QUOTES", value: response.data.quotes });
-      console.log(`Response.data fetchAll`, response.data);
+
+      const quotes = response.data.quotes;
+      const filtered = quotes.filter((quote, i) => {
+        return quotes.findIndex((q) => q.quoteText === quote.quoteText) === i;
+      });
+      dispatch({ type: "SET_QUOTES", value: filtered });
     } catch (e) {
       console.log(`Error`, e);
     } finally {
@@ -27,7 +30,6 @@ function Quotes() {
   useEffect(() => {
     fetchAll();
   }, []);
-  console.log(`Quotes`, state.quotes);
   return (
     <div className="quotes">
       <div
@@ -36,7 +38,7 @@ function Quotes() {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          enable-background="new 0 0 24 24"
+          enableBackground="new 0 0 24 24"
           viewBox="0 0 24 24"
           fill="black"
           width="18px"
@@ -48,7 +50,8 @@ function Quotes() {
         <span>Back</span>
       </div>
       <div className="quotes__author">{state.quote.quoteAuthor}</div>
-      {state.quotes.length > 0 && state.quotes.map((q) => <Quote quote={q} />)}
+      {state.quotes.length > 0 &&
+        state.quotes.map((q) => <Quote key={q._id} quote={q} />)}
     </div>
   );
 }

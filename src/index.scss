@@ -239,3 +239,17 @@ footer {
   box-shadow: 2px -2px 4px #0000000a;
   border-radius: 8px 8px 0 0;
 }
+
+// animation
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning {
+  animation: spinner 0.5s linear infinite;
+}
